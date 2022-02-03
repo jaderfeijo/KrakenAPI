@@ -23,13 +23,20 @@ let package = Package(
 		.target(
 			name: "KrakenAPI",
 			dependencies: [
-				.product(name: "WebSocket", package: "WebSocket.swift")
+				.product(
+					name: "WebSocket",
+					package: "WebSocket.swift"
+				)
 			]
 		),
 		.executableTarget(
 			name: "Kraken",
 			dependencies: [
-				.product(name: "ArgumentParser", package: "swift-argument-parser")
+				"KrakenAPI",
+				.product(
+					name: "ArgumentParser",
+					package: "swift-argument-parser"
+				)
 			]
 		),
 		.testTarget(

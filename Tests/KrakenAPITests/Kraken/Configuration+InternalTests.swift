@@ -3,8 +3,6 @@ import XCTest
 
 final class AccessInternalTests: XCTestCase {
 
-	typealias Configuration = Kraken.Configuration
-	
 	let productionPublicConfiguration = Configuration(
 		environment: .production,
 		access: .public)

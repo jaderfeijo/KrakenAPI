@@ -1,5 +1,6 @@
 import Foundation
 import ArgumentParser
+import KrakenAPI
 
 struct SelfTest: ParsableCommand {
 	
@@ -8,6 +9,14 @@ struct SelfTest: ParsableCommand {
 	)
 	
 	func run() throws {
-		print("YAY!!!")
+		let configuration = Configuration(
+			environment: .production,
+			access: .public)
+		let wsapi = WebSocketAPI(
+			configuration: configuration)
+		
+		wsapi.connect()
+		
+		RunLoop.main.run()
 	}
 }

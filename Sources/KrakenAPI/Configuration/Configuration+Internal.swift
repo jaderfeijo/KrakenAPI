@@ -1,6 +1,6 @@
 import Foundation
 
-extension Kraken.Configuration {
+extension Configuration {
 	var websocketHostname: String {
 		switch (environment, access) {
 		case (.production, .public):
