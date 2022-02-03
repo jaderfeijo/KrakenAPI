@@ -6,8 +6,8 @@
         "repositoryURL": "https://github.com/apple/swift-nio.git",
         "state": {
           "branch": null,
-          "revision": "51c3fc2e4a0fcdf4a25089b288dd65b73df1b0ef",
-          "version": "2.37.0"
+          "revision": "fb48bdd8279799f655da5f8b4e0a21430eca6012",
+          "version": "2.32.3"
         }
       },
       {
@@ -15,17 +15,17 @@
         "repositoryURL": "https://github.com/apple/swift-nio-ssl.git",
         "state": {
           "branch": null,
-          "revision": "52a486ff6de9bc3e26bf634c5413c41c5fa89ca5",
-          "version": "2.17.2"
+          "revision": "77a3bf17884d2c87ba400f4d93b9a6f27b078651",
+          "version": "2.15.1"
         }
       },
       {
-        "package": "websocket-kit",
-        "repositoryURL": "https://github.com/vapor/websocket-kit.git",
+        "package": "WebSocket",
+        "repositoryURL": "https://github.com/tesseract-one/WebSocket.swift.git",
         "state": {
           "branch": null,
-          "revision": "ff8fbce837ef01a93d49c6fb49a72be0f150dac7",
-          "version": "2.3.0"
+          "revision": "ec52c3b53b62136b9ded6a9b48e5801054619fbe",
+          "version": "0.1.0"
         }
       }
     ]

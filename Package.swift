@@ -12,12 +12,12 @@ let package = Package(
 		)
 	],
 	dependencies: [
-		.package(url: "https://github.com/vapor/websocket-kit.git", from: "2.3.0")
+		.package(url: "https://github.com/tesseract-one/WebSocket.swift.git", from: "0.1.0")
 	],
 	targets: [
 		.target(
 			name: "KrakenAPI",
-			dependencies: [.product(name: "WebSocketKit", package: "websocket-kit")]
+			dependencies: [.product(name: "WebSocket", package: "WebSocket.swift")]
 		),
 		.testTarget(
 			name: "KrakenAPITests",

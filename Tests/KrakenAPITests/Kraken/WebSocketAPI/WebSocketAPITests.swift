@@ -1,10 +1,10 @@
 import XCTest
 @testable import KrakenAPI
 
-final class WebsocketAPITests: XCTestCase {
+final class WebSocketAPITests: XCTestCase {
 
 	var config: Kraken.Configuration!
-	var sut: Kraken.WebsocketAPI!
+	var sut: Kraken.WebSocketAPI!
 
 	override func setUpWithError() throws {
 		try super.setUpWithError()

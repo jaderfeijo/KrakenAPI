@@ -1,8 +1,8 @@
 import Foundation
 
-extension Kraken.Configuration.Access {
-	func websocketHostname(for environment: Kraken.Configuration.Environment) -> String {
-		switch (environment, self) {
+extension Kraken.Configuration {
+	var websocketHostname: String {
+		switch (environment, access) {
 		case (.production, .public):
 			return "ws.kraken.com"
 		case (.production, .authenticated):
