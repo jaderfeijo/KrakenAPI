@@ -9,15 +9,28 @@ let package = Package(
 		.library(
 			name: "KrakenAPI",
 			targets: ["KrakenAPI"]
+		),
+		.executable(
+			name: "kraken",
+			targets: ["Kraken"]
 		)
 	],
 	dependencies: [
-		.package(url: "https://github.com/tesseract-one/WebSocket.swift.git", from: "0.1.0")
+		.package(url: "https://github.com/tesseract-one/WebSocket.swift.git", from: "0.1.0"),
+		.package(url: "https://github.com/apple/swift-argument-parser", from: "0.0.1")
 	],
 	targets: [
 		.target(
 			name: "KrakenAPI",
-			dependencies: [.product(name: "WebSocket", package: "WebSocket.swift")]
+			dependencies: [
+				.product(name: "WebSocket", package: "WebSocket.swift")
+			]
+		),
+		.executableTarget(
+			name: "Kraken",
+			dependencies: [
+				.product(name: "ArgumentParser", package: "swift-argument-parser")
+			]
 		),
 		.testTarget(
 			name: "KrakenAPITests",
