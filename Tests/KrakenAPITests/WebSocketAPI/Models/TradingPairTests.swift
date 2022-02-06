@@ -13,6 +13,8 @@ final class TradingPairTests: XCTestCase {
 
 		encoder = JSONEncoder()
 		decoder = JSONDecoder()
+
+		encoder.outputFormatting = .withoutEscapingSlashes
 	}
 
 	override func tearDownWithError() throws {
@@ -26,7 +28,7 @@ final class TradingPairTests: XCTestCase {
 		let pair = TradingPair(a: "USD", b: "BTC")
 		let object = JSONObject(pair: pair)
 		let data = try encoder.encode(object)
-		let encoded = String(data: data, encoding: .utf8)!
+		let encoded = String(decoding: data, as: UTF8.self)
 
 		print(encoded)
 		XCTAssertEqual(encoded, "{\"pair\":\"USD/BTC\"}")
