@@ -30,7 +30,6 @@ final class TradingPairTests: XCTestCase {
 		let data = try encoder.encode(object)
 		let encoded = String(decoding: data, as: UTF8.self)
 
-		print(encoded)
 		XCTAssertEqual(encoded, "{\"pair\":\"USD/BTC\"}")
 	}
 
