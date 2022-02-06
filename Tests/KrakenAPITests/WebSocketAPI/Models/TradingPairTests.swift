@@ -41,6 +41,20 @@ final class TradingPairTests: XCTestCase {
 		XCTAssertEqual(decoded.pair.a, "USD")
 		XCTAssertEqual(decoded.pair.b, "BTC")
 	}
+
+	func testDecodingInvalidFormat() throws {
+		let pair = "{\"pair\":\"USD-BTC\"}"
+		let data = pair.data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(JSONObject.self, from: data)
+			XCTFail("Expected exception to be thrown")
+		} catch WebSocketAPI.TradingPair.DecodingError.invalidFormat(let value) {
+			XCTAssertEqual(value, "USD-BTC")
+		} catch {
+			XCTFail("Unexpected error '\(error)'")
+		}
+	}
 }
 
 // MARK: - Private -
