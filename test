@@ -4,4 +4,4 @@ echo "********************************************"
 echo "*                  TEST                    *"
 echo "********************************************"
 echo ""
-swift test | xcbeautify
+swift test | mint run xcbeautify
