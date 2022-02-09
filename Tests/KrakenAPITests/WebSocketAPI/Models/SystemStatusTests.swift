@@ -2,6 +2,50 @@ import XCTest
 @testable import KrakenAPI
 
 final class SystemStatusTests: XCTestCase {
+
+	typealias SystemStatus = WebSocketAPI.SystemStatus
+
+	var encoder: JSONEncoder!
+	var decoder: JSONDecoder!
+
+	override func setUpWithError() throws {
+		try super.setUpWithError()
+
+		encoder = JSONEncoder()
+		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted
+		]
+	}
+
+	override func tearDownWithError() throws {
+		encoder = nil
+		decoder = nil
+
+		try super.tearDownWithError()
+	}
+	
+	func testEncoding() throws {
+		let status = SystemStatus(
+			status: .online,
+			version: "1.0",
+			connectionID: 8628615390848610000)
+		let data = try encoder.encode(status)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			{
+			  "connectionID" : 8628615390848610000,
+			  "status" : "online",
+			  "version" : "1.0"
+			}
+			"""
+		)
+	}
 }
 
 final class StatusTests: XCTestCase {
