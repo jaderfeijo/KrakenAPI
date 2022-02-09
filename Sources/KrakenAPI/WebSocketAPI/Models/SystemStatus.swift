@@ -18,7 +18,7 @@ extension WebSocketAPI {
 }
 
 extension WebSocketAPI.SystemStatus {
-	public enum Status: String, Codable {
+	public enum Status: String, CaseIterable, Codable {
 		case online = "online"
 		case maintenance = "maintenance"
 		case cancelOnly = "cancel_only"
