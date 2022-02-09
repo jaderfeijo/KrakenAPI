@@ -38,19 +38,19 @@ final class StatusTests: XCTestCase {
 			"""
 			[
 			  {
-			    \"status\" : \"online\"
+			    "status" : "online"
 			  },
 			  {
-			    \"status\" : \"maintenance\"
+			    "status" : "maintenance"
 			  },
 			  {
-			    \"status\" : \"cancel_only\"
+			    "status" : "cancel_only"
 			  },
 			  {
-			    \"status\" : \"limit_only\"
+			    "status" : "limit_only"
 			  },
 			  {
-			    \"status\" : \"post_only\"
+			    "status" : "post_only"
 			  }
 			]
 			"""
@@ -60,11 +60,11 @@ final class StatusTests: XCTestCase {
 	func testDecoding() throws {
 		let data = """
 		[
-			{\"status\" : \"online\"},
-			{\"status\" : \"maintenance\"},
-			{\"status\" : \"cancel_only\"},
-			{\"status\" : \"limit_only\"},
-			{\"status\" : \"post_only\"}
+			{"status" : "online"},
+			{"status" : "maintenance"},
+			{"status" : "cancel_only"},
+			{"status" : "limit_only"},
+			{"status" : "post_only"}
 		]
 		""".data(using: .utf8)!
 		let decoded = try decoder.decode([JSONObject].self, from: data)
@@ -79,6 +79,22 @@ final class StatusTests: XCTestCase {
 				.init(status: .postOnly)
 			]
 		)
+	}
+
+	func testDecodingInvalid() throws {
+		let data = """
+		{
+			"status": "invalid_case"
+		}
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(JSONObject.self, from: data)
+		} catch is DecodingError {
+			// success
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
 	}
 }
 
