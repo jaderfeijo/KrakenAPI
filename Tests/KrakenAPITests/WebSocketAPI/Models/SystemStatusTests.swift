@@ -84,6 +84,24 @@ final class SystemStatusTests: XCTestCase {
 			)
 		)
 	}
+
+	func testDecodingWithoutOptionalValue() throws {
+		let data = """
+		{
+			"status" : "online",
+			"version" : "1.0"
+		}
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(SystemStatus.self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			.init(
+				status: .online,
+				version: "1.0"
+			)
+		)
+	}
 }
 
 final class StatusTests: XCTestCase {
