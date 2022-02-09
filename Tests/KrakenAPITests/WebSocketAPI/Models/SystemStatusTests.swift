@@ -46,6 +46,24 @@ final class SystemStatusTests: XCTestCase {
 			"""
 		)
 	}
+
+	func testEncodingWithoutOptionalValue() throws {
+		let status = SystemStatus(
+			status: .online,
+			version: "1.0")
+		let data = try encoder.encode(status)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			{
+			  "status" : "online",
+			  "version" : "1.0"
+			}
+			"""
+		)
+	}
 }
 
 final class StatusTests: XCTestCase {
