@@ -56,12 +56,36 @@ final class StatusTests: XCTestCase {
 			"""
 		)
 	}
+
+	func testDecoding() throws {
+		let data = """
+		[
+			{\"status\" : \"online\"},
+			{\"status\" : \"maintenance\"},
+			{\"status\" : \"cancel_only\"},
+			{\"status\" : \"limit_only\"},
+			{\"status\" : \"post_only\"}
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode([JSONObject].self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			[
+				.init(status: .online),
+				.init(status: .maintenance),
+				.init(status: .cancelOnly),
+				.init(status: .limitOnly),
+				.init(status: .postOnly)
+			]
+		)
+	}
 }
 
 // MARK: - Private -
 
 private extension StatusTests {
-	struct JSONObject: Codable {
+	struct JSONObject: Equatable, Codable {
 		let status: Status
 	}
 }
