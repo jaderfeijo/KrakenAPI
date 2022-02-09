@@ -1,7 +1,7 @@
 import Foundation
 
 extension WebSocketAPI {
-	public struct SystemStatus: Codable {
+	public struct SystemStatus: Equatable, Codable {
 		public let status: Status
 		public let version: String
 		public let connectionID: Int?

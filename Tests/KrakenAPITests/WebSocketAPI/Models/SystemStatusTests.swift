@@ -64,6 +64,26 @@ final class SystemStatusTests: XCTestCase {
 			"""
 		)
 	}
+
+	func testDecoding() throws {
+		let data = """
+		{
+			"connectionID" : 8628615390848610000,
+			"status" : "online",
+			"version" : "1.0"
+		}
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(SystemStatus.self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			.init(
+				status: .online,
+				version: "1.0",
+				connectionID: 8628615390848610000
+			)
+		)
+	}
 }
 
 final class StatusTests: XCTestCase {
