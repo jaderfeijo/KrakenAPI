@@ -1,7 +1,7 @@
 import XCTest
 @testable import KrakenAPI
 
-class SubscriptionTests: XCTestCase {
+final class SubscriptionTests: XCTestCase {
 	override func setUpWithError() throws {
 		try super.setUpWithError()
 	}
@@ -12,6 +12,100 @@ class SubscriptionTests: XCTestCase {
 }
 
 // MARK: - Depth Tests
+
+final class DepthTests: XCTestCase {
+
+	typealias Depth = WebSocketAPI.Subscription.Options.Depth
+
+	var encoder: JSONEncoder!
+	var decoder: JSONDecoder!
+
+	override func setUpWithError() throws {
+		try super.setUpWithError()
+
+		encoder = JSONEncoder()
+		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted
+		]
+	}
+
+	override func tearDownWithError() throws {
+		encoder = nil
+		decoder = nil
+
+		try super.tearDownWithError()
+	}
+
+	func testEncoding() throws {
+		let data = try encoder.encode(
+			Depth.allCases.map {
+				JsonValue<Depth>(value: $0)
+			}
+		)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			[
+			  {
+			    "value" : 10
+			  },
+			  {
+			    "value" : 25
+			  },
+			  {
+			    "value" : 100
+			  },
+			  {
+			    "value" : 500
+			  },
+			  {
+			    "value" : 1000
+			  }
+			]
+			"""
+		)
+	}
+
+	func testDecoding() throws {
+		let data = """
+		[
+			{"value": 10},
+			{"value": 25},
+			{"value": 100},
+			{"value": 500},
+			{"value": 1000}
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode([JsonValue<Depth>].self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			Depth.allCases.map { .init(value: $0) }
+		)
+	}
+
+	func testDecodingInvalid() throws {
+		let data = """
+		{
+			"value": 5
+		}
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(Depth.self, from: data)
+			XCTFail("Expected failure!")
+		} catch is DecodingError {
+			// success
+		} catch {
+			XCTFail("Unexpected error '\(error)'")
+		}
+	}
+}
 
 // MARK: - Interval Tests -
 
