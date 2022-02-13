@@ -11,6 +11,114 @@ final class SubscriptionTests: XCTestCase {
 	}
 }
 
+// MARK: - Name Tests -
+
+final class NameTests: XCTestCase {
+
+	typealias Name = WebSocketAPI.Subscription.Options.Name
+
+	var encoder: JSONEncoder!
+	var decoder: JSONDecoder!
+
+	override func setUpWithError() throws {
+		try super.setUpWithError()
+
+		encoder = JSONEncoder()
+		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted
+		]
+	}
+
+	override func tearDownWithError() throws {
+		encoder = nil
+		decoder = nil
+
+		try super.tearDownWithError()
+	}
+
+	func testEncoding() throws {
+		let data = try encoder.encode(
+			Name.allCases.map {
+				JsonValue<Name>(value: $0)
+			}
+		)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			[
+			  {
+			    "value" : "book"
+			  },
+			  {
+			    "value" : "ohlc"
+			  },
+			  {
+			    "value" : "openOrders"
+			  },
+			  {
+			    "value" : "ownTrades"
+			  },
+			  {
+			    "value" : "spread"
+			  },
+			  {
+			    "value" : "ticker"
+			  },
+			  {
+			    "value" : "trade"
+			  },
+			  {
+			    "value" : "*"
+			  }
+			]
+			"""
+		)
+	}
+
+	func testDecoding() throws {
+		let data = """
+		[
+			{"value": "book"},
+			{"value": "ohlc"},
+			{"value": "openOrders"},
+			{"value": "ownTrades"},
+			{"value": "spread"},
+			{"value": "ticker"},
+			{"value": "trade"},
+			{"value": "*"}
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode([JsonValue<Name>].self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			Name.allCases.map { JsonValue<Name>(value: $0) }
+		)
+	}
+
+	func testDecodingInvalid() throws {
+		let data = """
+		{
+			"value": "invalid"
+		}
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(JsonValue<Name>.self, from: data)
+			XCTFail("Expected failure!")
+		} catch is DecodingError {
+			// success
+		} catch {
+			XCTFail("Unexpected exception thrown '\(error)'")
+		}
+	}
+}
+
 // MARK: - Depth Tests
 
 final class DepthTests: XCTestCase {
