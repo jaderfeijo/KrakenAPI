@@ -15,116 +15,106 @@ class SubscriptionTests: XCTestCase {
 
 // MARK: - Interval Tests -
 
-extension SubscriptionTests {
-	final class IntervalTests: XCTestCase {
+final class IntervalTests: XCTestCase {
 
-		typealias Interval = WebSocketAPI.Subscription.Options.Interval
+	typealias Interval = WebSocketAPI.Subscription.Options.Interval
 
-		var decoder: JSONDecoder!
-		var encoder: JSONEncoder!
+	var decoder: JSONDecoder!
+	var encoder: JSONEncoder!
 
-		override func setUpWithError() throws {
-			try super.setUpWithError()
+	override func setUpWithError() throws {
+		try super.setUpWithError()
 
-			encoder = JSONEncoder()
-			decoder = JSONDecoder()
+		encoder = JSONEncoder()
+		decoder = JSONDecoder()
 
-			encoder.outputFormatting = [
-				.sortedKeys,
-				.prettyPrinted
-			]
-		}
-
-		override func tearDownWithError() throws {
-			encoder = nil
-			decoder = nil
-
-			try super.tearDownWithError()
-		}
-
-		func testEncode() throws {
-			let objects = Interval.allCases.map(JsonObject<Interval>.init)
-			let data = try encoder.encode(objects)
-			let json = String(decoding: data, as: UTF8.self)
-
-			XCTAssertEqual(
-				json,
-				"""
-				[
-				  {
-				    "object" : 1
-				  },
-				  {
-				    "object" : 5
-				  },
-				  {
-				    "object" : 15
-				  },
-				  {
-				    "object" : 30
-				  },
-				  {
-				    "object" : 60
-				  },
-				  {
-				    "object" : 240
-				  },
-				  {
-				    "object" : 1440
-				  },
-				  {
-				    "object" : 10080
-				  },
-				  {
-				    "object" : 21600
-				  }
-				]
-				"""
-			)
-		}
-
-		func testDecode() throws {
-			let data = """
-			[
-				{"object": 1},
-				{"object": 5},
-				{"object": 15},
-				{"object": 30},
-				{"object": 60},
-				{"object": 240},
-				{"object": 1440},
-				{"object": 10080},
-				{"object": 21600}
-			]
-			""".data(using: .utf8)!
-			let decoded = try decoder.decode([JsonObject<Interval>].self, from: data)
-
-			XCTAssertEqual(decoded.map(\.object), Interval.allCases)
-		}
-
-		func testDecodeInvalid() throws {
-			let data = """
-			{
-				"object": 3
-			}
-			""".data(using: .utf8)!
-
-			do {
-				_ = try decoder.decode(JsonObject<Interval>.self, from: data)
-				XCTFail("Expected failure")
-			} catch is DecodingError {
-				// success
-			} catch {
-				XCTFail("Unexpected error '\(error)'")
-			}
-		}
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted
+		]
 	}
-}
 
-// MARK: - Private -
+	override func tearDownWithError() throws {
+		encoder = nil
+		decoder = nil
 
-extension SubscriptionTests {
-	struct JsonObject<T: Codable>: Codable {
-		let object: T
+		try super.tearDownWithError()
+	}
+
+	func testEncode() throws {
+		let objects = Interval.allCases.map(JsonValue<Interval>.init)
+		let data = try encoder.encode(objects)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			[
+			  {
+			    "value" : 1
+			  },
+			  {
+			    "value" : 5
+			  },
+			  {
+			    "value" : 15
+			  },
+			  {
+			    "value" : 30
+			  },
+			  {
+			    "value" : 60
+			  },
+			  {
+			    "value" : 240
+			  },
+			  {
+			    "value" : 1440
+			  },
+			  {
+			    "value" : 10080
+			  },
+			  {
+			    "value" : 21600
+			  }
+			]
+			"""
+		)
+	}
+
+	func testDecode() throws {
+		let data = """
+		[
+			{"value": 1},
+			{"value": 5},
+			{"value": 15},
+			{"value": 30},
+			{"value": 60},
+			{"value": 240},
+			{"value": 1440},
+			{"value": 10080},
+			{"value": 21600}
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode([JsonValue<Interval>].self, from: data)
+
+		XCTAssertEqual(decoded.map(\.value), Interval.allCases)
+	}
+
+	func testDecodeInvalid() throws {
+		let data = """
+		{
+			"object": 3
+		}
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(JsonValue<Interval>.self, from: data)
+			XCTFail("Expected failure")
+		} catch is DecodingError {
+			// success
+		} catch {
+			XCTFail("Unexpected error '\(error)'")
+		}
 	}
 }

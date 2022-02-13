@@ -128,8 +128,7 @@ final class StatusTests: XCTestCase {
 	}
 
 	func testEncoding() throws {
-		let statuses: [Status] = Status.allCases
-		let objects: [JSONObject] = statuses.map { .init(status: $0) }
+		let objects: [JsonValue<Status>] = Status.allCases.map { .init(value: $0) }
 		let data = try encoder.encode(objects)
 		let encoded = String(decoding: data, as: UTF8.self)
 
@@ -138,19 +137,19 @@ final class StatusTests: XCTestCase {
 			"""
 			[
 			  {
-			    "status" : "online"
+			    "value" : "online"
 			  },
 			  {
-			    "status" : "maintenance"
+			    "value" : "maintenance"
 			  },
 			  {
-			    "status" : "cancel_only"
+			    "value" : "cancel_only"
 			  },
 			  {
-			    "status" : "limit_only"
+			    "value" : "limit_only"
 			  },
 			  {
-			    "status" : "post_only"
+			    "value" : "post_only"
 			  }
 			]
 			"""
@@ -160,48 +159,34 @@ final class StatusTests: XCTestCase {
 	func testDecoding() throws {
 		let data = """
 		[
-			{"status" : "online"},
-			{"status" : "maintenance"},
-			{"status" : "cancel_only"},
-			{"status" : "limit_only"},
-			{"status" : "post_only"}
+			{"value" : "online"},
+			{"value" : "maintenance"},
+			{"value" : "cancel_only"},
+			{"value" : "limit_only"},
+			{"value" : "post_only"}
 		]
 		""".data(using: .utf8)!
-		let decoded = try decoder.decode([JSONObject].self, from: data)
+		let decoded = try decoder.decode([JsonValue<Status>].self, from: data)
 
 		XCTAssertEqual(
 			decoded,
-			[
-				.init(status: .online),
-				.init(status: .maintenance),
-				.init(status: .cancelOnly),
-				.init(status: .limitOnly),
-				.init(status: .postOnly)
-			]
+			Status.allCases.map { .init(value: $0) }
 		)
 	}
 
 	func testDecodingInvalid() throws {
 		let data = """
 		{
-			"status": "invalid_case"
+			"value": "invalid_case"
 		}
 		""".data(using: .utf8)!
 
 		do {
-			_ = try decoder.decode(JSONObject.self, from: data)
+			_ = try decoder.decode(JsonValue<Status>.self, from: data)
 		} catch is DecodingError {
 			// success
 		} catch {
 			XCTFail("Expected DecodingError, got '\(error)' instead")
 		}
-	}
-}
-
-// MARK: - Private -
-
-private extension StatusTests {
-	struct JSONObject: Equatable, Codable {
-		let status: Status
 	}
 }

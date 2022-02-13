@@ -26,41 +26,33 @@ final class TradingPairTests: XCTestCase {
 
 	func testEncoding() throws {
 		let pair = TradingPair(a: "USD", b: "BTC")
-		let object = JSONObject(pair: pair)
+		let object = JsonValue<TradingPair>(value: pair)
 		let data = try encoder.encode(object)
 		let encoded = String(decoding: data, as: UTF8.self)
 
-		XCTAssertEqual(encoded, "{\"pair\":\"USD/BTC\"}")
+		XCTAssertEqual(encoded, "{\"value\":\"USD/BTC\"}")
 	}
 
 	func testDecoding() throws {
-		let pair = "{\"pair\":\"USD/BTC\"}"
+		let pair = "{\"value\":\"USD/BTC\"}"
 		let data = pair.data(using: .utf8)!
-		let decoded = try decoder.decode(JSONObject.self, from: data)
+		let decoded = try decoder.decode(JsonValue<TradingPair>.self, from: data)
 
-		XCTAssertEqual(decoded.pair.a, "USD")
-		XCTAssertEqual(decoded.pair.b, "BTC")
+		XCTAssertEqual(decoded.value.a, "USD")
+		XCTAssertEqual(decoded.value.b, "BTC")
 	}
 
 	func testDecodingInvalidFormat() throws {
-		let pair = "{\"pair\":\"USD-BTC\"}"
+		let pair = "{\"value\":\"USD-BTC\"}"
 		let data = pair.data(using: .utf8)!
 
 		do {
-			_ = try decoder.decode(JSONObject.self, from: data)
+			_ = try decoder.decode(JsonValue<TradingPair>.self, from: data)
 			XCTFail("Expected exception to be thrown")
 		} catch WebSocketAPI.TradingPair.DecodingError.invalidFormat(let value) {
 			XCTAssertEqual(value, "USD-BTC")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
 		}
-	}
-}
-
-// MARK: - Private -
-
-private extension TradingPairTests {
-	struct JSONObject: Codable {
-		let pair: TradingPair
 	}
 }
