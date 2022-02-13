@@ -11,6 +11,114 @@ final class SubscriptionTests: XCTestCase {
 	}
 }
 
+// MARK: - Options Tests -
+
+final class OptionsTests: XCTestCase {
+
+	typealias Options = WebSocketAPI.Subscription.Options
+
+	var encoder: JSONEncoder!
+	var decoder: JSONDecoder!
+
+	override func setUpWithError() throws {
+		try super.setUpWithError()
+
+		encoder = JSONEncoder()
+		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted
+		]
+	}
+
+	override func tearDownWithError() throws {
+		encoder = nil
+		decoder = nil
+
+		try super.tearDownWithError()
+	}
+
+	func testEncoding() throws {
+		let options = Options(
+			name: .book,
+			depth: .shallowest,
+			interval: .oneMinute,
+			rateCounter: true,
+			snapshot: true,
+			token: "some-token")
+		let data = try encoder.encode(options)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			{
+			  "depth" : 10,
+			  "interval" : 1,
+			  "name" : "book",
+			  "rateCounter" : true,
+			  "snapshot" : true,
+			  "token" : "some-token"
+			}
+			"""
+		)
+	}
+
+	func testEncodingWithoutOptionalValues() throws {
+		let options = Options(name: .book)
+		let data = try encoder.encode(options)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			{
+			  "name" : "book"
+			}
+			"""
+		)
+	}
+
+	func testDecoding() throws {
+		let data = """
+		{
+			"name": "book",
+			"depth": 10,
+			"interval": 1,
+			"rateCounter": true,
+			"snapshot": true,
+			"token": "some-token"
+		}
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(Options.self, from: data)
+
+		XCTAssertEqual(decoded.name, .book)
+		XCTAssertEqual(decoded.depth, .shallowest)
+		XCTAssertEqual(decoded.interval, .oneMinute)
+		XCTAssertEqual(decoded.rateCounter, true)
+		XCTAssertEqual(decoded.snapshot, true)
+		XCTAssertEqual(decoded.token, "some-token")
+	}
+
+	func testDecodingWithoutOptionalValues() throws {
+		let data = """
+		{
+			"name": "book",
+			"depth" : null
+		}
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(Options.self, from: data)
+
+		XCTAssertEqual(decoded.name, .book)
+		XCTAssertNil(decoded.depth)
+		XCTAssertNil(decoded.interval)
+		XCTAssertNil(decoded.rateCounter)
+		XCTAssertNil(decoded.snapshot)
+		XCTAssertNil(decoded.token)
+	}
+}
+
 // MARK: - Name Tests -
 
 final class NameTests: XCTestCase {
