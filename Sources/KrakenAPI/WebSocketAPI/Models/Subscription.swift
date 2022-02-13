@@ -34,7 +34,7 @@ extension WebSocketAPI.Subscription {
 }
 
 extension WebSocketAPI.Subscription.Options {
-	public enum Name: String, Codable {
+	public enum Name: String, CaseIterable, Codable {
 		case book = "book"
 		case ohlc = "ohlc"
 		case openOrders = "openOrders"
@@ -47,7 +47,7 @@ extension WebSocketAPI.Subscription.Options {
 }
 
 extension WebSocketAPI.Subscription.Options {
-	public enum Depth: Int, Codable {
+	public enum Depth: Int, CaseIterable, Codable {
 		case shallowest = 10
 		case shallow = 25
 		case medium = 100
@@ -57,7 +57,7 @@ extension WebSocketAPI.Subscription.Options {
 }
 
 extension WebSocketAPI.Subscription.Options {
-	public enum Interval: Int, Codable {
+	public enum Interval: Int, CaseIterable, Codable {
 		case oneMinute = 1
 		case fiveMinutes = 5
 		case fifteenMinutes = 15
