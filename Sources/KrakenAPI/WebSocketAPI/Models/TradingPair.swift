@@ -1,7 +1,7 @@
 import Foundation
 
 extension WebSocketAPI {
-	public struct TradingPair {
+	public struct TradingPair: Equatable {
 		public let a: String
 		public let b: String
 

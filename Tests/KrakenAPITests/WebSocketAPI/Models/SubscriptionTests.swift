@@ -2,12 +2,72 @@ import XCTest
 @testable import KrakenAPI
 
 final class SubscriptionTests: XCTestCase {
+
+	typealias Subscription = WebSocketAPI.Subscription
+
+	var encoder: JSONEncoder!
+	var decoder: JSONDecoder!
+
 	override func setUpWithError() throws {
 		try super.setUpWithError()
+
+		encoder = JSONEncoder()
+		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted,
+			.withoutEscapingSlashes
+		]
 	}
 
 	override func tearDownWithError() throws {
+		encoder = nil
+		decoder = nil
+
 		try super.tearDownWithError()
+	}
+
+	func testEncoding() throws {
+		let subscription = Subscription(
+			pair: [
+				.init(a: "BTC", b: "USD")
+			],
+			options: .init(name: .book)
+		)
+		let data = try encoder.encode(subscription)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			{
+			  "options" : {
+			    "name" : "book"
+			  },
+			  "pair" : [
+			    "BTC/USD"
+			  ]
+			}
+			"""
+		)
+	}
+
+	func testDecoding() throws {
+		let data = """
+		{
+			"pair": [
+				"BTC/USD"
+			],
+			"options": {
+				"name": "book"
+			}
+		}
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(Subscription.self, from: data)
+
+		XCTAssertEqual(decoded.pair, [.init(a: "BTC", b: "USD")])
+		XCTAssertEqual(decoded.options.name, .book)
 	}
 }
 
