@@ -3,7 +3,7 @@ import XCTest
 
 final class TradingPairTests: XCTestCase {
 
-	typealias TradingPair = WebSocketAPI.TradingPair
+	typealias TradingPair = WebSocketAPI.Messages.General.TradingPair
 	
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -49,7 +49,7 @@ final class TradingPairTests: XCTestCase {
 		do {
 			_ = try decoder.decode(JsonValue<TradingPair>.self, from: data)
 			XCTFail("Expected exception to be thrown")
-		} catch WebSocketAPI.TradingPair.DecodingError.invalidFormat(let value) {
+		} catch WebSocketAPI.Messages.General.TradingPair.DecodingError.invalidFormat(let value) {
 			XCTAssertEqual(value, "USD-BTC")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")

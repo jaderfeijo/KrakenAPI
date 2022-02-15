@@ -1,6 +1,6 @@
 import Foundation
 
-extension WebSocketAPI {
+extension WebSocketAPI.Messages.General {
 	public struct SystemStatus: Equatable, Codable {
 		public let status: Status
 		public let version: String
@@ -17,7 +17,7 @@ extension WebSocketAPI {
 	}
 }
 
-extension WebSocketAPI.SystemStatus {
+extension WebSocketAPI.Messages.General.SystemStatus {
 	public enum Status: String, CaseIterable, Codable {
 		case online = "online"
 		case maintenance = "maintenance"

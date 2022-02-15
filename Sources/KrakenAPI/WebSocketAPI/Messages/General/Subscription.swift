@@ -1,13 +1,13 @@
 import Foundation
 
-extension WebSocketAPI {
+extension WebSocketAPI.Messages.General {
 	public struct Subscription: Codable {
 		public let pair: [TradingPair]
 		public let options: Options
 	}
 }
 
-extension WebSocketAPI.Subscription {
+extension WebSocketAPI.Messages.General.Subscription {
 	public struct Options: Codable {
 		public let name: Name
 		public let depth: Depth?
@@ -33,7 +33,7 @@ extension WebSocketAPI.Subscription {
 	}
 }
 
-extension WebSocketAPI.Subscription.Options {
+extension WebSocketAPI.Messages.General.Subscription.Options {
 	public enum Name: String, CaseIterable, Codable {
 		case book = "book"
 		case ohlc = "ohlc"
@@ -46,7 +46,7 @@ extension WebSocketAPI.Subscription.Options {
 	}
 }
 
-extension WebSocketAPI.Subscription.Options {
+extension WebSocketAPI.Messages.General.Subscription.Options {
 	public enum Depth: Int, CaseIterable, Codable {
 		case shallowest = 10
 		case shallow = 25
@@ -56,7 +56,7 @@ extension WebSocketAPI.Subscription.Options {
 	}
 }
 
-extension WebSocketAPI.Subscription.Options {
+extension WebSocketAPI.Messages.General.Subscription.Options {
 	public enum Interval: Int, CaseIterable, Codable {
 		case oneMinute = 1
 		case fiveMinutes = 5

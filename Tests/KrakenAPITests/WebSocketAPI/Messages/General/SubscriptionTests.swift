@@ -3,7 +3,7 @@ import XCTest
 
 final class SubscriptionTests: XCTestCase {
 
-	typealias Subscription = WebSocketAPI.Subscription
+	typealias Subscription = WebSocketAPI.Messages.General.Subscription
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -75,7 +75,7 @@ final class SubscriptionTests: XCTestCase {
 
 final class OptionsTests: XCTestCase {
 
-	typealias Options = WebSocketAPI.Subscription.Options
+	typealias Options = WebSocketAPI.Messages.General.Subscription.Options
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -183,7 +183,7 @@ final class OptionsTests: XCTestCase {
 
 final class NameTests: XCTestCase {
 
-	typealias Name = WebSocketAPI.Subscription.Options.Name
+	typealias Name = WebSocketAPI.Messages.General.Subscription.Options.Name
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -291,7 +291,7 @@ final class NameTests: XCTestCase {
 
 final class DepthTests: XCTestCase {
 
-	typealias Depth = WebSocketAPI.Subscription.Options.Depth
+	typealias Depth = WebSocketAPI.Messages.General.Subscription.Options.Depth
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -387,7 +387,7 @@ final class DepthTests: XCTestCase {
 
 final class IntervalTests: XCTestCase {
 
-	typealias Interval = WebSocketAPI.Subscription.Options.Interval
+	typealias Interval = WebSocketAPI.Messages.General.Subscription.Options.Interval
 
 	var decoder: JSONDecoder!
 	var encoder: JSONEncoder!

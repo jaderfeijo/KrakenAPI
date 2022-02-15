@@ -1,6 +1,6 @@
 import Foundation
 
-extension WebSocketAPI {
+extension WebSocketAPI.Messages.General {
 	public struct TradingPair: Equatable {
 		public let a: String
 		public let b: String
@@ -14,14 +14,14 @@ extension WebSocketAPI {
 	}
 }
 
-extension WebSocketAPI.TradingPair: Encodable {
+extension WebSocketAPI.Messages.General.TradingPair: Encodable {
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.singleValueContainer()
 		try container.encode(a + "/" + b)
 	}
 }
 
-extension WebSocketAPI.TradingPair: Decodable {
+extension WebSocketAPI.Messages.General.TradingPair: Decodable {
 	enum DecodingError: Swift.Error {
 		case invalidFormat(value: String)
 	}

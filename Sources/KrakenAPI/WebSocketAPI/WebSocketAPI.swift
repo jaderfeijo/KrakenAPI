@@ -2,13 +2,12 @@ import Foundation
 import WebSocket
 
 public class WebSocketAPI {
-
 	private lazy var socket: WebSocket = {
 		let socket = WebSocket()
 		observe(socket)
 		return socket
 	}()
-		
+
 	public let configuration: Configuration
 
 	public init(configuration: Configuration) {
@@ -17,7 +16,6 @@ public class WebSocketAPI {
 }
 
 public extension WebSocketAPI {
-	
 	var isConnected: Bool {
 		socket.isConnected
 	}
@@ -38,19 +36,19 @@ private extension WebSocketAPI {
 		socket.onConnected = { ws in
 			print("WS -> Connected...")
 		}
-		
+
 		socket.onError = { error, ws in
 			print("WS -> Error '\(error)'")
 		}
-		
+
 		socket.onPing = { ws in
 			print("WS -> PING!")
 		}
-		
+
 		socket.onPong = { ws in
 			print("WS -> PONG!")
 		}
-		
+
 		socket.onData = { data, ws in
 			switch data {
 			case .text(let message):
@@ -59,11 +57,11 @@ private extension WebSocketAPI {
 				print("WS -> Data -> \(String(decoding: data, as: UTF8.self))")
 			}	
 		}
-		
+
 		socket.onDisconnected = { errorCode, ws in
 			print("WS -> Disconnected! -> [\(errorCode)]")
 		}
-		
+
 		print("Observing websocket...")
 	}
 }

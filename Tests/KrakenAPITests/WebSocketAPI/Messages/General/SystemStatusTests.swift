@@ -3,7 +3,7 @@ import XCTest
 
 final class SystemStatusTests: XCTestCase {
 
-	typealias SystemStatus = WebSocketAPI.SystemStatus
+	typealias SystemStatus = WebSocketAPI.Messages.General.SystemStatus
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -106,7 +106,7 @@ final class SystemStatusTests: XCTestCase {
 
 final class StatusTests: XCTestCase {
 
-	typealias Status = WebSocketAPI.SystemStatus.Status
+	typealias Status = WebSocketAPI.Messages.General.SystemStatus.Status
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
