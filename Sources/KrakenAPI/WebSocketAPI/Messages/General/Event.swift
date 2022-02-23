@@ -1,7 +1,7 @@
 import Foundation
 
 extension WebSocketAPI.Messages.General {
-	public enum Event: String, Codable {
+	public enum Event: String, CaseIterable, Codable {
 		case ping
 		case pong
 		case heartbeat
