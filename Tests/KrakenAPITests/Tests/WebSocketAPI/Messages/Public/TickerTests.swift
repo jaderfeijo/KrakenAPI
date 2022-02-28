@@ -305,7 +305,7 @@ class PriceWholeVolumeTests: XCTestCase {
 		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidPrice")
 		} catch {
-			XCTFail("Expected DecodingError, got '\(error)' instead")
+			XCTFail("Unexpected error '\(error)'")
 		}
 	}
 
@@ -324,7 +324,7 @@ class PriceWholeVolumeTests: XCTestCase {
 		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidLotVolume")
 		} catch {
-			XCTFail("Expected DecodingError, got '\(error)' instead")
+			XCTFail("Unexpected error '\(error)'")
 		}
 	}
 }
@@ -406,7 +406,7 @@ class PriceVolumeTests: XCTestCase {
 		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidPrice")
 		} catch {
-			XCTFail("Expected DecodingError, got '\(error)' instead")
+			XCTFail("Unexpected error '\(error)'")
 		}
 	}
 
@@ -424,7 +424,7 @@ class PriceVolumeTests: XCTestCase {
 		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidLotVolume")
 		} catch {
-			XCTFail("Expected DecodingError, got '\(error)' instead")
+			XCTFail("Unexpected error '\(error)'")
 		}
 	}
 }
@@ -570,7 +570,7 @@ class DecimalValuePairTests: XCTestCase {
 		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidToday")
 		} catch {
-			XCTFail("Expected DecodingError, got '\(error)' instead")
+			XCTFail("Unexpected error '\(error)'")
 		}
 	}
 
@@ -588,7 +588,7 @@ class DecimalValuePairTests: XCTestCase {
 		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalid24Hours")
 		} catch {
-			XCTFail("Expected DecodingError, got '\(error)' instead")
+			XCTFail("Unexpected error '\(error)'")
 		}
 	}
 }
