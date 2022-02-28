@@ -12,16 +12,16 @@ extension WebSocketAPI.Messages.Public {
 }
 
 extension WebSocketAPI.Messages.Public.Ticker {
-	public struct Pricing {
+	public struct Pricing: Equatable {
 		let ask: PriceWholeVolume
 		let bid: PriceWholeVolume
 		let close: PriceVolume
-		let volume: Value
-		let averagePrice: Value
-		let numberOfTrades: Value
-		let low: Value
-		let high: Value
-		let open: Value
+		let volume: DecimalValuePair
+		let averagePrice: DecimalValuePair
+		let numberOfTrades: IntegerValuePair
+		let low: DecimalValuePair
+		let high: DecimalValuePair
+		let open: DecimalValuePair
 	}
 }
 
@@ -41,7 +41,14 @@ extension WebSocketAPI.Messages.Public.Ticker.Pricing {
 }
 
 extension WebSocketAPI.Messages.Public.Ticker.Pricing {
-	public struct Value: Equatable {
+	public struct IntegerValuePair: Equatable {
+		let today: Int
+		let last24Hours: Int
+	}
+}
+
+extension WebSocketAPI.Messages.Public.Ticker.Pricing {
+	public struct DecimalValuePair: Equatable {
 		let today: Double
 		let last24Hours: Double
 	}
@@ -77,77 +84,65 @@ extension WebSocketAPI.Messages.Public.Ticker.Pricing: Codable {
 		case numberOfTrades = "t"
 		case low = "l"
 		case high = "h"
-		case open = "open"
+		case open = "o"
 	}
 }
 
 extension WebSocketAPI.Messages.Public.Ticker.Pricing.PriceWholeVolume: Codable {
-	typealias DecodingError = WebSocketAPI.Messages.Internal.ValueCodable.DecodingError
-
 	public init(from decoder: Decoder) throws {
 		var container = try decoder.unkeyedContainer()
 
-		let priceString = try container.decode(String.self)
-		let wholeLotVolume = try container.decode(Int.self)
-		let lotVolumeString = try container.decode(String.self)
-
-		guard let price = Double(priceString) else {
-			throw DecodingError.invalidDoubleString(priceString)
-		}
-
-		guard let lotVolume = Double(lotVolumeString) else {
-			throw DecodingError.invalidDoubleString(lotVolumeString)
-		}
-
-		self.price = price
-		self.wholeLotVolume = wholeLotVolume
-		self.lotVolume = lotVolume
+		self.price = try container.decodeStringAs(Double.self)
+		self.wholeLotVolume = try container.decode(Int.self)
+		self.lotVolume = try container.decodeStringAs(Double.self)
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.unkeyedContainer()
-		try container.encode(String(price))
+		try container.encodeAsString(price)
 		try container.encode(wholeLotVolume)
-		try container.encode(String(lotVolume))
+		try container.encodeAsString(lotVolume)
 	}
 }
 
 extension WebSocketAPI.Messages.Public.Ticker.Pricing.PriceVolume: Codable {
-	typealias ValueCodable = WebSocketAPI.Messages.Internal.ValueCodable
-
 	public init(from decoder: Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		let value = try container.decode(ValueCodable.self)
-		self.price = value.a
-		self.lotVolume = value.b
+		var container = try decoder.unkeyedContainer()
+		self.price = try container.decodeStringAs(Double.self)
+		self.lotVolume = try container.decodeStringAs(Double.self)
 	}
 
 	public func encode(to encoder: Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(
-			ValueCodable(
-				a: price,
-				b: lotVolume)
-		)
+		var container = encoder.unkeyedContainer()
+		try container.encodeAsString(price)
+		try container.encodeAsString(lotVolume)
 	}
 }
 
-extension WebSocketAPI.Messages.Public.Ticker.Pricing.Value: Codable {
-	typealias ValueCodable = WebSocketAPI.Messages.Internal.ValueCodable
-
+extension WebSocketAPI.Messages.Public.Ticker.Pricing.IntegerValuePair: Codable {
 	public init(from decoder: Decoder) throws {
-		let container = try decoder.singleValueContainer()
-		let value = try container.decode(ValueCodable.self)
-		self.today = value.a
-		self.last24Hours = value.b
+		var container = try decoder.unkeyedContainer()
+		self.today = try container.decode(Int.self)
+		self.last24Hours = try container.decode(Int.self)
 	}
 
 	public func encode(to encoder: Encoder) throws {
-		var container = encoder.singleValueContainer()
-		try container.encode(
-			ValueCodable(
-				a: today,
-				b: last24Hours)
-		)
+		var container = encoder.unkeyedContainer()
+		try container.encode(today)
+		try container.encode(last24Hours)
+	}
+}
+
+extension WebSocketAPI.Messages.Public.Ticker.Pricing.DecimalValuePair: Codable {
+	public init(from decoder: Decoder) throws {
+		var container = try decoder.unkeyedContainer()
+		self.today = try container.decodeStringAs(Double.self)
+		self.last24Hours = try container.decodeStringAs(Double.self)
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.unkeyedContainer()
+		try container.encodeAsString(today)
+		try container.encodeAsString(last24Hours)
 	}
 }
