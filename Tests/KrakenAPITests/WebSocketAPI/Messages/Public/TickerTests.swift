@@ -68,6 +68,7 @@ class PricingTests: XCTestCase {
 class PriceWholeVolumeTests: XCTestCase {
 
 	typealias PriceWholeVolume = WebSocketAPI.Messages.Public.Ticker.Pricing.PriceWholeVolume
+	typealias DecodingError = PriceWholeVolume.DecodingError
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -77,6 +78,10 @@ class PriceWholeVolumeTests: XCTestCase {
 
 		encoder = JSONEncoder()
 		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.prettyPrinted
+		]
 	}
 
 	override func tearDownWithError() throws {
@@ -87,11 +92,81 @@ class PriceWholeVolumeTests: XCTestCase {
 	}
 
 	func testEncoding() throws {
-		XCTFail("Not yet implemented")
+		let price = PriceWholeVolume(
+			price: 5525.40001,
+			wholeLotVolume: 1,
+			lotVolume: 1.001)
+		let data = try encoder.encode(price)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			[
+			  "5525.40001",
+			  1,
+			  "1.001"
+			]
+			"""
+		)
 	}
 
 	func testDecoding() throws {
-		XCTFail("Not yet implemented")
+		let data = """
+		[
+		  "5525.10001",
+		  1,
+		  "1.001"
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(PriceWholeVolume.self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			PriceWholeVolume(
+				price: 5525.10001,
+				wholeLotVolume: 1,
+				lotVolume: 1.001
+			)
+		)
+	}
+
+	func testDecodingErrorInvalidPrice() throws {
+		let data = """
+		[
+		  "invalidPrice",
+		  1,
+		  "1.001"
+		]
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(PriceWholeVolume.self, from: data)
+			XCTFail("Expected failure")
+		} catch DecodingError.invalidDoubleString(let invalidString) {
+			XCTAssertEqual(invalidString, "invalidPrice")
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
+	}
+
+	func testDecodingErrorInvalidLotVolume() throws {
+		let data = """
+		[
+		  "5525.10001",
+		  1,
+		  "invalidLotVolume"
+		]
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(PriceWholeVolume.self, from: data)
+			XCTFail("Expected failure")
+		} catch DecodingError.invalidDoubleString(let invalidString) {
+			XCTAssertEqual(invalidString, "invalidLotVolume")
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
 	}
 }
 
@@ -100,6 +175,7 @@ class PriceWholeVolumeTests: XCTestCase {
 class PriceVolumeTests: XCTestCase {
 
 	typealias PriceVolume = WebSocketAPI.Messages.Public.Ticker.Pricing.PriceVolume
+	typealias DecodingError = WebSocketAPI.Messages.Internal.ValueCodable.DecodingError
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -157,6 +233,42 @@ class PriceVolumeTests: XCTestCase {
 			)
 		)
 	}
+
+	func testDecodingErrorInvalidPrice() throws {
+		let data = """
+		[
+			"invalidPrice",
+			"3591.17907851"
+		]
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(PriceVolume.self, from: data)
+			XCTFail("Expected failure")
+		} catch DecodingError.invalidDoubleString(let invalidString) {
+			XCTAssertEqual(invalidString, "invalidPrice")
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
+	}
+
+	func testDecodingErrorInvalidLotVolume() throws {
+		let data = """
+		[
+			"5525.10001",
+			"invalidLotVolume"
+		]
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(PriceVolume.self, from: data)
+			XCTFail("Expected failure")
+		} catch DecodingError.invalidDoubleString(let invalidString) {
+			XCTAssertEqual(invalidString, "invalidLotVolume")
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
+	}
 }
 
 // MARK: - Value -
@@ -164,6 +276,7 @@ class PriceVolumeTests: XCTestCase {
 class ValueTests: XCTestCase {
 
 	typealias Value = WebSocketAPI.Messages.Public.Ticker.Pricing.Value
+	typealias DecodingError = WebSocketAPI.Messages.Internal.ValueCodable.DecodingError
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -220,5 +333,41 @@ class ValueTests: XCTestCase {
 				last24Hours: 3591.17907851
 			)
 		)
+	}
+
+	func testDecodingErrorInvalidToday() throws {
+		let data = """
+		[
+			"invalidToday",
+			"3591.17907851"
+		]
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(Value.self, from: data)
+			XCTFail("Expected failure")
+		} catch DecodingError.invalidDoubleString(let invalidString) {
+			XCTAssertEqual(invalidString, "invalidToday")
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
+	}
+
+	func testDecodingErrorInvalidLast24Hours() throws {
+		let data = """
+		[
+			"2634.11501494",
+			"invalid24Hours"
+		]
+		""".data(using: .utf8)!
+
+		do {
+			_ = try decoder.decode(Value.self, from: data)
+			XCTFail("Expected failure")
+		} catch DecodingError.invalidDoubleString(let invalidString) {
+			XCTAssertEqual(invalidString, "invalid24Hours")
+		} catch {
+			XCTFail("Expected DecodingError, got '\(error)' instead")
+		}
 	}
 }
