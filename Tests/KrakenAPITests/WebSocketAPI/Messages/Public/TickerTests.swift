@@ -109,6 +109,10 @@ class PriceVolumeTests: XCTestCase {
 
 		encoder = JSONEncoder()
 		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.prettyPrinted
+		]
 	}
 
 	override func tearDownWithError() throws {
@@ -119,11 +123,39 @@ class PriceVolumeTests: XCTestCase {
 	}
 
 	func testEncoding() throws {
-		XCTFail("Not yet implemented")
+		let price = PriceVolume(
+			price: 5525.10001,
+			lotVolume: 0.00398963)
+		let data = try encoder.encode(price)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			[
+			  "5525.10001",
+			  "0.00398963"
+			]
+			"""
+		)
 	}
 
 	func testDecoding() throws {
-		XCTFail("Not yet implemented")
+		let data = """
+		[
+			"5525.10001",
+			"0.00398963"
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(PriceVolume.self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			PriceVolume(
+				price: 5525.10001,
+				lotVolume: 0.00398963
+			)
+		)
 	}
 }
 

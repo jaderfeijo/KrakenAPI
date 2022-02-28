@@ -15,7 +15,7 @@ extension WebSocketAPI.Messages.Public.Ticker {
 	public struct Pricing {
 		let ask: PriceWholeVolume
 		let bid: PriceWholeVolume
-		let close: Value
+		let close: PriceVolume
 		let volume: Value
 		let averagePrice: Value
 		let numberOfTrades: Value
@@ -34,7 +34,7 @@ extension WebSocketAPI.Messages.Public.Ticker.Pricing {
 }
 
 extension WebSocketAPI.Messages.Public.Ticker.Pricing {
-	public struct PriceVolume: Codable, Equatable {
+	public struct PriceVolume: Equatable {
 		let price: Double
 		let lotVolume: Double
 	}
@@ -78,6 +78,26 @@ extension WebSocketAPI.Messages.Public.Ticker.Pricing: Codable {
 		case low = "l"
 		case high = "h"
 		case open = "open"
+	}
+}
+
+extension WebSocketAPI.Messages.Public.Ticker.Pricing.PriceVolume: Codable {
+	typealias ValueCodable = WebSocketAPI.Messages.Internal.ValueCodable
+
+	public init(from decoder: Decoder) throws {
+		let container = try decoder.singleValueContainer()
+		let value = try container.decode(ValueCodable.self)
+		self.price = value.a
+		self.lotVolume = value.b
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.singleValueContainer()
+		try container.encode(
+			ValueCodable(
+				a: price,
+				b: lotVolume)
+		)
 	}
 }
 
