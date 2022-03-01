@@ -3,7 +3,7 @@ import Foundation
 extension WebSocketAPI.Messages.Public {
 	typealias TradingPair = WebSocketAPI.Messages.General.TradingPair
 
-	public struct Ticker {
+	public struct Ticker: Equatable {
 		let channelID: Int
 		let pricing: Pricing
 		let channelName: String

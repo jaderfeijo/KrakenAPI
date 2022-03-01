@@ -13,6 +13,12 @@ class TickerTests: XCTestCase {
 
 		encoder = JSONEncoder()
 		decoder = JSONDecoder()
+
+		encoder.outputFormatting = [
+			.sortedKeys,
+			.prettyPrinted,
+			.withoutEscapingSlashes
+		]
 	}
 
 	override func tearDownWithError() throws {
@@ -23,11 +29,186 @@ class TickerTests: XCTestCase {
 	}
 
 	func testEncoding() throws {
-		XCTFail("Not yet implemented")
+		let ticker = Ticker(
+			channelID: 0,
+			pricing: .init(
+				ask: .init(
+					price: 5525.40001,
+					wholeLotVolume: 1,
+					lotVolume: 1.001),
+				bid: .init(
+					price: 5525.10001,
+					wholeLotVolume: 1,
+					lotVolume: 1.001),
+				close: .init(
+					price: 5525.10001,
+					lotVolume: 0.00398963),
+				volume: .init(
+					today: 2634.11501494,
+					last24Hours: 3591.17907851),
+				averagePrice: .init(
+					today: 5631.44067,
+					last24Hours: 5653.78939),
+				numberOfTrades: .init(
+					today: 11493,
+					last24Hours: 16267),
+				low: .init(
+					today: 5505.00001,
+					last24Hours: 5505.00001),
+				high: .init(
+					today: 5783.00001,
+					last24Hours: 5783.00001),
+				open: .init(
+					today: 5760.70001,
+					last24Hours: 5763.40001)
+			),
+			channelName: "ticker",
+			pair: .init(a: "XBT", b: "USD")
+		)
+		let data = try encoder.encode(ticker)
+		let json = String(decoding: data, as: UTF8.self)
+
+		XCTAssertEqual(
+			json,
+			"""
+			[
+			  0,
+			  {
+			    "a" : [
+			      "5525.40001",
+			      1,
+			      "1.001"
+			    ],
+			    "b" : [
+			      "5525.10001",
+			      1,
+			      "1.001"
+			    ],
+			    "c" : [
+			      "5525.10001",
+			      "0.00398963"
+			    ],
+			    "h" : [
+			      "5783.00001",
+			      "5783.00001"
+			    ],
+			    "l" : [
+			      "5505.00001",
+			      "5505.00001"
+			    ],
+			    "o" : [
+			      "5760.70001",
+			      "5763.40001"
+			    ],
+			    "p" : [
+			      "5631.44067",
+			      "5653.78939"
+			    ],
+			    "t" : [
+			      11493,
+			      16267
+			    ],
+			    "v" : [
+			      "2634.11501494",
+			      "3591.17907851"
+			    ]
+			  },
+			  "ticker",
+			  "XBT/USD"
+			]
+			"""
+		)
 	}
 
 	func testDecoding() throws {
-		XCTFail("Not yet implemented")
+		let data = """
+		[
+			0,
+			{
+				"a" : [
+					"5525.40001",
+					1,
+					"1.001"
+				],
+				"b" : [
+					"5525.10001",
+					1,
+					"1.001"
+				],
+				"c" : [
+					"5525.10001",
+					"0.00398963"
+				],
+				"h" : [
+					"5783.00001",
+					"5783.00001"
+				],
+				"l" : [
+					"5505.00001",
+					"5505.00001"
+				],
+				"o" : [
+					"5760.70001",
+					"5763.40001"
+				],
+				"p" : [
+					"5631.44067",
+					"5653.78939"
+				],
+				"t" : [
+					11493,
+					16267
+				],
+				"v" : [
+					"2634.11501494",
+					"3591.17907851"
+				]
+			},
+			"ticker",
+			"XBT/USD"
+		]
+		""".data(using: .utf8)!
+		let decoded = try decoder.decode(Ticker.self, from: data)
+
+		XCTAssertEqual(
+			decoded,
+			Ticker(
+				channelID: 0,
+				pricing: .init(
+					ask: .init(
+						price: 5525.40001,
+						wholeLotVolume: 1,
+						lotVolume: 1.001),
+					bid: .init(
+						price: 5525.10001,
+						wholeLotVolume: 1,
+						lotVolume: 1.001),
+					close: .init(
+						price: 5525.10001,
+						lotVolume: 0.00398963),
+					volume: .init(
+						today: 2634.11501494,
+						last24Hours: 3591.17907851),
+					averagePrice: .init(
+						today: 5631.44067,
+						last24Hours: 5653.78939),
+					numberOfTrades: .init(
+						today: 11493,
+						last24Hours: 16267),
+					low: .init(
+						today: 5505.00001,
+						last24Hours: 5505.00001),
+					high: .init(
+						today: 5783.00001,
+						last24Hours: 5783.00001),
+					open: .init(
+						today: 5760.70001,
+						last24Hours: 5763.40001)
+				),
+				channelName: "ticker",
+				pair: .init(a: "XBT", b: "USD")
+			)
+		)
 	}
 }
 
