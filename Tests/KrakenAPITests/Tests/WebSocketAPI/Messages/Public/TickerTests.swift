@@ -483,7 +483,7 @@ class PriceWholeVolumeTests: XCTestCase {
 		do {
 			_ = try decoder.decode(PriceWholeVolume.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidPrice")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
@@ -502,7 +502,7 @@ class PriceWholeVolumeTests: XCTestCase {
 		do {
 			_ = try decoder.decode(PriceWholeVolume.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidLotVolume")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
@@ -584,7 +584,7 @@ class PriceVolumeTests: XCTestCase {
 		do {
 			_ = try decoder.decode(PriceVolume.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidPrice")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
@@ -602,7 +602,7 @@ class PriceVolumeTests: XCTestCase {
 		do {
 			_ = try decoder.decode(PriceVolume.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidLotVolume")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
@@ -748,7 +748,7 @@ class DecimalValuePairTests: XCTestCase {
 		do {
 			_ = try decoder.decode(DecimalValuePair.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalidToday")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
@@ -766,7 +766,7 @@ class DecimalValuePairTests: XCTestCase {
 		do {
 			_ = try decoder.decode(DecimalValuePair.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalid24Hours")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")

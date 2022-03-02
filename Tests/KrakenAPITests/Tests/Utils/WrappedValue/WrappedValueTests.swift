@@ -1,7 +1,7 @@
 import XCTest
 @testable import KrakenAPI
 
-class StringEncodingDecodingTests: XCTestCase {
+class WrappedValueTests: XCTestCase {
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!
@@ -21,14 +21,14 @@ class StringEncodingDecodingTests: XCTestCase {
 	}
 }
 
-extension StringEncodingDecodingTests {
+extension WrappedValueTests {
 	func testDecodeAsString() throws {
 		let data = """
 		["1.101"]
 		""".data(using: .utf8)!
-		let decoded = try decoder.decode(Value<Double>.self, from: data)
+		let decoded = try decoder.decode(Value.self, from: data)
 
-		XCTAssertEqual(decoded, .init(value: 1.101))
+		XCTAssertEqual(decoded, .init(wrappedValue: .init(value: 1.101)))
 	}
 
 	func testDecodeAsStringError() throws {
@@ -37,9 +37,9 @@ extension StringEncodingDecodingTests {
 		""".data(using: .utf8)!
 
 		do {
-			_ = try decoder.decode(Value<Double>.self, from: data)
+			_ = try decoder.decode(Value.self, from: data)
 			XCTFail("Expected failure")
-		} catch StringDecodingError<Double>.invalidValue(let invalidString) {
+		} catch StringWrapped<Double>.ParsingError.invalidValue(let invalidString) {
 			XCTAssertEqual(invalidString, "invalid")
 		} catch {
 			XCTFail("Unexpected error '\(error)'")
@@ -47,9 +47,9 @@ extension StringEncodingDecodingTests {
 	}
 }
 
-extension StringEncodingDecodingTests {
+extension WrappedValueTests {
 	func testEncodeAsString() throws {
-		let value = Value(value: 1.101)
+		let value = Value(wrappedValue: .init(value: 1.101))
 		let data = try encoder.encode(value)
 		let json = String(decoding: data, as: UTF8.self)
 
@@ -59,20 +59,20 @@ extension StringEncodingDecodingTests {
 
 // MARK: - Private -
 
-private extension StringEncodingDecodingTests {
-	struct Value<T>: Equatable where T: Equatable, T: Codable, T: StringParsable, T: CustomStringConvertible {
-		let value: T
+private extension WrappedValueTests {
+	struct Value: Equatable {
+		let wrappedValue: WrappedValue<Double, String>
 	}
 }
 
-extension StringEncodingDecodingTests.Value: Codable {
+extension WrappedValueTests.Value: Codable {
 	init(from decoder: Decoder) throws {
 		var container = try decoder.unkeyedContainer()
-		self.value = try container.decodeStringAs(T.self)
+		self.wrappedValue = try container.decode(WrappedValue<Double, String>.self)
 	}
 
 	func encode(to encoder: Encoder) throws {
 		var container = encoder.unkeyedContainer()
-		try container.encodeAsString(value)
+		try container.encode(wrappedValue)
 	}
 }

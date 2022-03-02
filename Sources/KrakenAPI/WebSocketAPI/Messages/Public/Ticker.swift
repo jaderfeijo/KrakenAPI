@@ -1,8 +1,6 @@
 import Foundation
 
 extension WebSocketAPI.Messages.Public {
-	typealias TradingPair = WebSocketAPI.Messages.General.TradingPair
-
 	public struct Ticker: Equatable {
 		let channelID: Int
 		let pricing: Pricing
@@ -92,30 +90,30 @@ extension WebSocketAPI.Messages.Public.Ticker.Pricing.PriceWholeVolume: Codable 
 	public init(from decoder: Decoder) throws {
 		var container = try decoder.unkeyedContainer()
 
-		self.price = try container.decodeStringAs(Double.self)
+		self.price = try container.decode(StringWrapped<Double>.self)
 		self.wholeLotVolume = try container.decode(Int.self)
-		self.lotVolume = try container.decodeStringAs(Double.self)
+		self.lotVolume = try container.decode(StringWrapped<Double>.self)
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.unkeyedContainer()
-		try container.encodeAsString(price)
+		try container.encode(price, as: StringWrapped<Double>.self)
 		try container.encode(wholeLotVolume)
-		try container.encodeAsString(lotVolume)
+		try container.encode(lotVolume, as: StringWrapped<Double>.self)
 	}
 }
 
 extension WebSocketAPI.Messages.Public.Ticker.Pricing.PriceVolume: Codable {
 	public init(from decoder: Decoder) throws {
 		var container = try decoder.unkeyedContainer()
-		self.price = try container.decodeStringAs(Double.self)
-		self.lotVolume = try container.decodeStringAs(Double.self)
+		self.price = try container.decode(StringWrapped<Double>.self)
+		self.lotVolume = try container.decode(StringWrapped<Double>.self)
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.unkeyedContainer()
-		try container.encodeAsString(price)
-		try container.encodeAsString(lotVolume)
+		try container.encode(price, as: StringWrapped<Double>.self)
+		try container.encode(lotVolume, as: StringWrapped<Double>.self)
 	}
 }
 
@@ -136,13 +134,13 @@ extension WebSocketAPI.Messages.Public.Ticker.Pricing.IntegerValuePair: Codable 
 extension WebSocketAPI.Messages.Public.Ticker.Pricing.DecimalValuePair: Codable {
 	public init(from decoder: Decoder) throws {
 		var container = try decoder.unkeyedContainer()
-		self.today = try container.decodeStringAs(Double.self)
-		self.last24Hours = try container.decodeStringAs(Double.self)
+		self.today = try container.decode(StringWrapped<Double>.self)
+		self.last24Hours = try container.decode(StringWrapped<Double>.self)
 	}
 
 	public func encode(to encoder: Encoder) throws {
 		var container = encoder.unkeyedContainer()
-		try container.encodeAsString(today)
-		try container.encodeAsString(last24Hours)
+		try container.encode(today, as: StringWrapped<Double>.self)
+		try container.encode(last24Hours, as: StringWrapped<Double>.self)
 	}
 }
