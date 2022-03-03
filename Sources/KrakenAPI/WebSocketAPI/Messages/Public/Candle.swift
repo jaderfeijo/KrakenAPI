@@ -3,14 +3,14 @@ import Foundation
 extension WebSocketAPI.Messages.Public {
 	public struct Candle: Equatable {
 		let channelID: Int
-		let data: CandleData
+		let data: Data
 		let channelName: String
 		let pair: TradingPair
 	}
 }
 
 extension WebSocketAPI.Messages.Public.Candle {
-	public struct CandleData: Equatable {
+	public struct Data: Equatable {
 		let time: Double
 		let endTime: Double
 		let open: Double
@@ -25,7 +25,28 @@ extension WebSocketAPI.Messages.Public.Candle {
 
 // MARK: - Codable Conformance -
 
-extension WebSocketAPI.Messages.Public.Candle.CandleData: Codable {
+extension WebSocketAPI.Messages.Public.Candle: Codable {
+	typealias CandleData = WebSocketAPI.Messages.Public.Candle.Data
+	typealias TradingPair = WebSocketAPI.Messages.Public.TradingPair
+
+	public init(from decoder: Decoder) throws {
+		var container = try decoder.unkeyedContainer()
+		self.channelID = try container.decode(Int.self)
+		self.data = try container.decode(CandleData.self)
+		self.channelName = try container.decode(String.self)
+		self.pair = try container.decode(TradingPair.self)
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.unkeyedContainer()
+		try container.encode(channelID)
+		try container.encode(data)
+		try container.encode(channelName)
+		try container.encode(pair)
+	}
+}
+
+extension WebSocketAPI.Messages.Public.Candle.Data: Codable {
 	public init(from decoder: Decoder) throws {
 		var container = try decoder.unkeyedContainer()
 		self.time = try container.decode(StringWrapped<Double>.self)
