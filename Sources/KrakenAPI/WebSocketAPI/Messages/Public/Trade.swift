@@ -1,9 +1,9 @@
 import Foundation
 
 extension WebSocketAPI.Messages.Public {
-	public struct Trade: Equatable, Codable {
+	public struct Trade: Equatable {
 		let channelID: Int
-		let info: Info
+		let info: [Info]
 		let channelName: String
 		let pair: TradingPair
 	}
@@ -35,6 +35,25 @@ extension WebSocketAPI.Messages.Public.Trade.Info {
 }
 
 // MARK: - Codable Conformance -
+
+extension WebSocketAPI.Messages.Public.Trade: Codable {
+	public init(from decoder: Decoder) throws {
+		typealias TradingPair = WebSocketAPI.Messages.General.TradingPair
+		var container = try decoder.unkeyedContainer()
+		self.channelID = try container.decode(Int.self)
+		self.info = try container.decode([Info].self)
+		self.channelName = try container.decode(String.self)
+		self.pair = try container.decode(TradingPair.self)
+	}
+
+	public func encode(to encoder: Encoder) throws {
+		var container = encoder.unkeyedContainer()
+		try container.encode(channelID)
+		try container.encode(info)
+		try container.encode(channelName)
+		try container.encode(pair)
+	}
+}
 
 extension WebSocketAPI.Messages.Public.Trade.Info: Codable {
 	public init(from decoder: Decoder) throws {
