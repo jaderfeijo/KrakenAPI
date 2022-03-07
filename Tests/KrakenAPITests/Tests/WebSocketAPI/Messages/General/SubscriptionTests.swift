@@ -287,7 +287,7 @@ final class NameTests: XCTestCase {
 	}
 }
 
-// MARK: - Depth Tests
+// MARK: - Depth Tests -
 
 final class DepthTests: XCTestCase {
 

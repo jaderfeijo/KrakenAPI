@@ -1,7 +1,7 @@
 import XCTest
 @testable import KrakenAPI
 
-class TickerTests: XCTestCase {
+final class TickerTests: XCTestCase {
 
 	typealias Ticker = WebSocketAPI.Messages.Public.Ticker
 
@@ -214,7 +214,7 @@ class TickerTests: XCTestCase {
 
 // MARK: - Pricing -
 
-class PricingTests: XCTestCase {
+final class PricingTests: XCTestCase {
 
 	typealias Pricing = WebSocketAPI.Messages.Public.Ticker.Pricing
 
@@ -406,7 +406,7 @@ class PricingTests: XCTestCase {
 
 // MARK: - PriceWholeVolume -
 
-class PriceWholeVolumeTests: XCTestCase {
+final class PriceWholeVolumeTests: XCTestCase {
 
 	typealias PriceWholeVolume = WebSocketAPI.Messages.Public.Ticker.Pricing.PriceWholeVolume
 
@@ -512,7 +512,7 @@ class PriceWholeVolumeTests: XCTestCase {
 
 // MARK: - PriceVolume -
 
-class PriceVolumeTests: XCTestCase {
+final class PriceVolumeTests: XCTestCase {
 
 	typealias PriceVolume = WebSocketAPI.Messages.Public.Ticker.Pricing.PriceVolume
 
@@ -612,7 +612,7 @@ class PriceVolumeTests: XCTestCase {
 
 // MARK: - IntegerValuePair -
 
-class IntegerValuePairTests: XCTestCase {
+final class IntegerValuePairTests: XCTestCase {
 
 	typealias IntegerValuePair = WebSocketAPI.Messages.Public.Ticker.Pricing.IntegerValuePair
 
@@ -676,7 +676,7 @@ class IntegerValuePairTests: XCTestCase {
 
 // MARK: - DecimalValuePair -
 
-class DecimalValuePairTests: XCTestCase {
+final class DecimalValuePairTests: XCTestCase {
 
 	typealias DecimalValuePair = WebSocketAPI.Messages.Public.Ticker.Pricing.DecimalValuePair
 

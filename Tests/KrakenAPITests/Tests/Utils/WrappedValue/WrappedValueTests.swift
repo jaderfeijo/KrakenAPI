@@ -1,7 +1,7 @@
 import XCTest
 @testable import KrakenAPI
 
-class WrappedValueTests: XCTestCase {
+final class WrappedValueTests: XCTestCase {
 
 	var encoder: JSONEncoder!
 	var decoder: JSONDecoder!

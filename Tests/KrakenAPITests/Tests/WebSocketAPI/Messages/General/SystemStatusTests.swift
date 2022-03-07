@@ -104,6 +104,8 @@ final class SystemStatusTests: XCTestCase {
 	}
 }
 
+// MARK: - Status -
+
 final class StatusTests: XCTestCase {
 
 	typealias Status = WebSocketAPI.Messages.General.SystemStatus.Status
@@ -183,6 +185,7 @@ final class StatusTests: XCTestCase {
 
 		do {
 			_ = try decoder.decode(JsonValue<Status>.self, from: data)
+			XCTFail("Expected failure")
 		} catch is DecodingError {
 			// success
 		} catch {

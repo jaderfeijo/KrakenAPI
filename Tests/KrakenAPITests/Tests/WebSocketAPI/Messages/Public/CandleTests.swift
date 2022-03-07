@@ -1,7 +1,7 @@
 import XCTest
 @testable import KrakenAPI
 
-class CandleTests: XCTestCase {
+final class CandleTests: XCTestCase {
 	typealias Candle = WebSocketAPI.Messages.Public.Candle
 
 	var encoder: JSONEncoder!
@@ -110,7 +110,9 @@ class CandleTests: XCTestCase {
 	}
 }
 
-class CandleDataTests: XCTestCase {
+// MARK: - CandleData -
+
+final class CandleDataTests: XCTestCase {
 	typealias CandleData = WebSocketAPI.Messages.Public.Candle.Data
 
 	var encoder: JSONEncoder!

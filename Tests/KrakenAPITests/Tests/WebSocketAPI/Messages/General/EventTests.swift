@@ -1,7 +1,7 @@
 import XCTest
 @testable import KrakenAPI
 
-class EventTests: XCTestCase {
+final class EventTests: XCTestCase {
 
 	typealias Event = WebSocketAPI.Messages.General.Event
 
