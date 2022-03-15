@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+echo "********************************************"
+echo "*                  TEST                    *"
+echo "********************************************"
+echo ""
+swift test | mint run xcbeautify

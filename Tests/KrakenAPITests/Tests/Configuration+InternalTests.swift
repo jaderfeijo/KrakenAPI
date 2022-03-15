@@ -2,7 +2,6 @@ import XCTest
 @testable import KrakenAPI
 
 final class AccessInternalTests: XCTestCase {
-
 	let productionPublicConfiguration = Configuration(
 		environment: .production,
 		access: .public)
