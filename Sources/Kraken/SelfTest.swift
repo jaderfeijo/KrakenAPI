@@ -9,6 +9,8 @@ struct SelfTest: ParsableCommand {
 	)
 	
 	func run() throws {
+		exitOnCtrlC()
+
 		let configuration = Configuration(
 			environment: .production,
 			access: .public)
@@ -18,5 +20,9 @@ struct SelfTest: ParsableCommand {
 		wsapi.connect()
 		
 		RunLoop.main.run()
+	}
+
+	func exitOnCtrlC() {
+		signal(SIGINT) { _ in SelfTest.exit() }
 	}
 }
